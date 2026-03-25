@@ -4,9 +4,10 @@ import WelcomeScreen from './components/WelcomeScreen';
 import QuestionScreen from './components/QuestionScreen';
 import LeadCaptureScreen from './components/LeadCaptureScreen';
 import ResultScreen from './components/ResultScreen';
+import CheckoutPage from './components/CheckoutPage';
 import { questions } from './data/questions';
 
-export type Step = 'welcome' | 'quiz' | 'lead' | 'result';
+export type Step = 'welcome' | 'quiz' | 'lead' | 'result' | 'checkout';
 
 export default function App() {
   const [step, setStep] = useState<Step>('welcome');
@@ -31,6 +32,10 @@ export default function App() {
     setStep('result');
   };
 
+  const handleGoToCheckout = () => {
+    setStep('checkout');
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-emerald-200">
       <AnimatePresence mode="wait">
@@ -45,7 +50,8 @@ export default function App() {
           />
         )}
         {step === 'lead' && <LeadCaptureScreen key="lead" onSubmit={handleLeadSubmit} />}
-        {step === 'result' && <ResultScreen key="result" score={score} />}
+        {step === 'result' && <ResultScreen key="result" score={score} onCheckout={handleGoToCheckout} />}
+        {step === 'checkout' && <CheckoutPage key="checkout" />}
       </AnimatePresence>
     </div>
   );

@@ -1,28 +1,13 @@
 import { motion } from 'motion/react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   AlertCircle, CheckCircle, Activity, Star, ShieldCheck,
-  BookOpen, PlayCircle, Utensils, ListTodo, Gift, Clock, Flame
+  BookOpen, PlayCircle, Utensils, ListTodo, Gift
 } from 'lucide-react';
 
 interface Props {
   score: number;
-}
-
-// ─── Countdown hook (15 minutos de urgência) ────────────────────────────────
-function useCountdown(initialMinutes: number) {
-  const [timeLeft, setTimeLeft] = useState(initialMinutes * 60);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => (prev <= 1 ? 0 : prev - 1));
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const m = Math.floor(timeLeft / 60);
-  const s = timeLeft % 60;
-  return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  onCheckout: () => void;
 }
 
 // ─── Configuração por nível ──────────────────────────────────────────────────
@@ -38,9 +23,9 @@ function getLevelConfig(score: number) {
       badgeBg: 'bg-orange-500',
       icon: <Activity className="w-12 h-12 text-orange-500" />,
       message:
-        'Suas articulações já mostram sinais claros de desgaste. Sem ação, a tendência é piorar progressivamente.',
+        'Suas articulações já mostram sinais de desgaste. O problema não é você, e não é falta de esforço. Com os estímulos certos, é possível melhorar muito.',
       urgencyText:
-        'Pessoas no nível moderado que agiram logo relataram melhora em 2 a 3 semanas.',
+        'Pessoas que começaram a se cuidar nessa fase relatam alívio em poucas semanas.',
     };
   }
   if (score > 14) {
@@ -54,9 +39,9 @@ function getLevelConfig(score: number) {
       badgeBg: 'bg-rose-500',
       icon: <AlertCircle className="w-12 h-12 text-rose-500" />,
       message:
-        'Suas articulações precisam de atenção urgente. O desgaste já impacta significativamente sua qualidade de vida.',
+        'Suas articulações precisam de carinho e atenção agora. Mesmo que você já tenha tentado outras coisas, ainda existem caminhos para recuperar sua qualidade de vida.',
       urgencyText:
-        'Em casos avançados, cada semana sem ação pode aumentar o risco de limitações permanentes.',
+        'Cada pequeno passo hoje faz uma grande diferença na sua mobilidade de amanhã.',
     };
   }
   return {
@@ -69,18 +54,17 @@ function getLevelConfig(score: number) {
     badgeBg: 'bg-emerald-500',
     icon: <CheckCircle className="w-12 h-12 text-emerald-500" />,
     message:
-      'Suas articulações ainda estão no início do processo. Esta é a MELHOR hora para agir — antes que o desgaste se agrave.',
+      'Suas articulações estão no início do desgaste. Muita gente acha que essa dorzinha é "normal da idade", mas não deveria ser. Esta é a melhor hora para cuidar de você.',
     urgencyText:
-      'Iniciar agora é 3× mais eficaz do que esperar os sintomas piorarem.',
+      'Agir agora é o caminho mais simples para evitar que o desconforto aumente.',
   };
 }
 
-export default function ResultScreen({ score }: Props) {
+export default function ResultScreen({ score, onCheckout }: Props) {
   const cfg = getLevelConfig(score);
-  const countdown = useCountdown(15);
 
   const handleCheckout = () => {
-    window.location.href = 'https://pay.kactus.com.br/checkout/exemplo';
+    onCheckout();
   };
 
   return (
@@ -116,25 +100,35 @@ export default function ResultScreen({ score }: Props) {
           </p>
         </div>
 
-        {/* ── O que é possível ────────────────────────────────────────── */}
-        <div className="px-6 py-7">
-          <p className="text-slate-600 leading-relaxed mb-5 text-base">
-            A boa notícia é que, com os estímulos certos, é possível aliviar dores e recuperar sua mobilidade —{' '}
-            <strong>sem sair de casa e sem gastar fortunas.</strong>
+        {/* ── Conexão Emocional e Educação ────────────────────────────── */}
+        <div className="px-6 py-8">
+          <p className="text-slate-600 leading-relaxed mb-4 text-base">
+            Se você sente dor ao se levantar, caminhar ou até descansar… eu quero que saiba que <strong>você não está sozinho.</strong>
+          </p>
+          <p className="text-slate-600 leading-relaxed mb-4 text-base">
+            Muita gente acha que isso é "normal da idade", mas a verdade é que conviver com dor constante não deveria ser normal. O problema não é você… e na maioria das vezes, também não é falta de esforço.
+          </p>
+          <p className="text-slate-600 leading-relaxed mb-6 text-base">
+            Com o tempo, as articulações sofrem desgaste — mas com os estímulos certos, é possível melhorar muito a qualidade de vida. Mesmo que você já tenha tentado outras coisas, ainda existem caminhos mais simples e acessíveis.
           </p>
 
           <div className="bg-emerald-50 rounded-2xl p-5 border border-emerald-100">
-            <ul className="space-y-3">
-              {[
-                'Todo o conteúdo pode ser feito em casa',
-                'Acesse tudo pelo celular, no seu ritmo',
-                'Sem academia, sem equipamentos caros',
-              ].map((item) => (
-                <li key={item} className="flex items-center text-slate-800 font-medium text-sm">
-                  <CheckCircle className="w-5 h-5 text-emerald-500 mr-3 flex-shrink-0" />
-                  {item}
-                </li>
-              ))}
+            <h3 className="font-bold text-emerald-800 mb-4 text-center">
+              Pensando nisso, foi criado um plano simples:
+            </h3>
+            <ul className="space-y-4">
+              <li className="flex items-start text-slate-700 font-medium text-sm">
+                <CheckCircle className="w-5 h-5 text-emerald-500 mr-3 flex-shrink-0 mt-0.5" />
+                <span>Focado em trazer <strong>menos dor e mais mobilidade</strong> para o seu dia a dia.</span>
+              </li>
+              <li className="flex items-start text-slate-700 font-medium text-sm">
+                <CheckCircle className="w-5 h-5 text-emerald-500 mr-3 flex-shrink-0 mt-0.5" />
+                <span>Feito no conforto da sua casa. <strong>Você não precisa de academia</strong> ou equipamentos caros.</span>
+              </li>
+              <li className="flex items-start text-slate-700 font-medium text-sm">
+                <CheckCircle className="w-5 h-5 text-emerald-500 mr-3 flex-shrink-0 mt-0.5" />
+                <span><strong>Acesse tudo diretamente pelo seu celular</strong>, no seu tempo e no seu ritmo.</span>
+              </li>
             </ul>
           </div>
         </div>
@@ -142,28 +136,16 @@ export default function ResultScreen({ score }: Props) {
         {/* ── Oferta ─────────────────────────────────────────────────── */}
         <div className="bg-gradient-to-b from-slate-50 to-white px-6 py-8 border-t border-slate-100">
 
-          {/* Contador de compras recentes */}
-          <div className="flex items-center justify-center gap-2 bg-amber-50 border border-amber-200 rounded-xl px-4 py-2.5 mb-6">
-            <Flame className="w-4 h-4 text-amber-500" />
-            <span className="text-sm font-semibold text-amber-800">
-              🔥 <strong>1.247 pessoas</strong> compraram esta semana
-            </span>
-          </div>
-
-          <h2 className="text-xl font-bold text-slate-800 mb-1 text-center leading-tight">
-            Plano personalizado para o seu nível
+          <h2 className="text-xl font-bold text-slate-800 mb-6 text-center leading-tight">
+            Um caminho prático para cuidar de você
           </h2>
-          <p className="text-slate-500 text-sm text-center mb-6">
-            Montamos um método simples e prático baseado no seu diagnóstico
-          </p>
 
-          {/* Card do produto — imagem CORRIGIDA: exercício em casa, não mulher de negócios */}
+          {/* Card do produto */}
           <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border-2 border-emerald-500 relative mb-6">
             <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-500 text-white text-xs font-bold uppercase tracking-wider py-1 px-4 rounded-full shadow-sm whitespace-nowrap">
-              ⭐ Plano Recomendado para Você
+              ⭐ Plano Recomendado
             </div>
             <div className="p-5 pt-6">
-              {/* Imagem corrigida: idosa fazendo exercício leve em casa */}
               <div className="aspect-video rounded-xl overflow-hidden mb-5 relative shadow-inner">
                 <img
                   src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=80&w=800"
@@ -180,10 +162,10 @@ export default function ResultScreen({ score }: Props) {
 
               <div className="space-y-2.5">
                 {[
-                  { icon: <BookOpen className="w-4 h-4 text-emerald-600" />, title: 'Ebook Principal', desc: 'Método passo a passo para desinflamar e recuperar mobilidade' },
-                  { icon: <PlayCircle className="w-4 h-4 text-emerald-600" />, title: 'Rotina de Exercícios em Vídeo', desc: 'Movimentos leves de 10 min para fazer na sala de casa' },
-                  { icon: <Utensils className="w-4 h-4 text-emerald-600" />, title: 'Guia Alimentar Antiinflamatório', desc: 'Alimentos que aliviam dores e protegem as articulações' },
-                  { icon: <ListTodo className="w-4 h-4 text-emerald-600" />, title: 'Checklist Diário de Progresso', desc: 'Acompanhe sua melhora dia a dia' },
+                  { icon: <BookOpen className="w-4 h-4 text-emerald-600" />, title: 'Ebook Principal', desc: 'Passo a passo simples para desinflamar' },
+                  { icon: <PlayCircle className="w-4 h-4 text-emerald-600" />, title: 'Rotina em Vídeo', desc: 'Movimentos leves de 10 min para fazer na sala' },
+                  { icon: <Utensils className="w-4 h-4 text-emerald-600" />, title: 'Guia Alimentar', desc: 'Alimentos que protegem as articulações' },
+                  { icon: <ListTodo className="w-4 h-4 text-emerald-600" />, title: 'Checklist Diário', desc: 'Acompanhe sua melhora de forma fácil' },
                 ].map((item) => (
                   <div key={item.title} className="flex items-start bg-slate-50 p-3 rounded-xl border border-slate-100">
                     <div className="mt-0.5 mr-3 flex-shrink-0">{item.icon}</div>
@@ -198,83 +180,63 @@ export default function ResultScreen({ score }: Props) {
           </div>
 
           {/* Seção de bônus */}
-          <div className="border-2 border-dashed border-amber-300 rounded-2xl p-4 mb-6 bg-amber-50">
+          <div className="border border-emerald-100 rounded-2xl p-4 mb-8 bg-emerald-50/50">
             <div className="flex items-center gap-2 mb-3">
-              <Gift className="w-5 h-5 text-amber-600" />
-              <span className="font-bold text-amber-800 text-sm uppercase tracking-wide">Bônus Incluídos</span>
+              <Gift className="w-5 h-5 text-emerald-600" />
+              <span className="font-bold text-emerald-800 text-sm uppercase tracking-wide">Presentes Inclusos</span>
             </div>
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-sm text-slate-700">
-                <span className="text-amber-500 font-bold flex-shrink-0">+</span>
-                <span><strong>Bônus 1:</strong> Guia de automassagem articular (5 min/dia)</span>
+                <span className="text-emerald-500 font-bold flex-shrink-0">+</span>
+                <span><strong>Bônus 1:</strong> Guia de automassagem (5 min/dia)</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-slate-700">
-                <span className="text-amber-500 font-bold flex-shrink-0">+</span>
-                <span><strong>Bônus 2:</strong> Protocolo especial para noites sem dor</span>
+                <span className="text-emerald-500 font-bold flex-shrink-0">+</span>
+                <span><strong>Bônus 2:</strong> Protocolo para noites mais tranquilas</span>
               </div>
             </div>
           </div>
 
           {/* Âncora de preço */}
-          <div className="bg-slate-800 text-white rounded-3xl p-6 text-center mb-6 relative overflow-hidden shadow-xl">
+          <div className="bg-slate-800 text-white rounded-3xl p-6 text-center mb-8 relative overflow-hidden shadow-xl">
             <div className="absolute top-0 right-0 w-40 h-40 bg-emerald-500/20 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-40 h-40 bg-orange-500/20 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-40 h-40 bg-emerald-500/10 rounded-full blur-3xl" />
 
-            <p className="text-slate-300 text-sm mb-3 relative z-10">
-              Tratamentos convencionais custam{' '}
-              <span className="line-through text-slate-500">R$ 200–500/mês</span>
+            <p className="text-slate-300 text-sm mb-4 relative z-10 leading-relaxed">
+              Se você fosse buscar isso de forma tradicional, com sessões semanais e deslocamentos, poderia gastar muito mais...
             </p>
             <p className="text-white font-medium mb-2 relative z-10 text-base">
-              Você tem acesso a tudo por apenas:
+              Mas você pode começar hoje por um valor acessível:
             </p>
             <div className="flex items-baseline justify-center gap-2 relative z-10 mb-1">
-              <span className="text-slate-500 line-through text-base">R$ 97,00</span>
               <span className="text-5xl font-black text-emerald-400">R$ 19,90</span>
             </div>
             <p className="text-sm text-emerald-300 font-semibold relative z-10">
-              Pagamento único • Acesso imediato • Para sempre
+              Pagamento único • Acesso para sempre
             </p>
           </div>
 
-          {/* Timer de urgência */}
-          <div className="flex items-center justify-center gap-2 bg-rose-50 border border-rose-200 rounded-xl px-4 py-3 mb-6">
-            <Clock className="w-4 h-4 text-rose-500" />
-            <span className="text-sm font-semibold text-rose-700">
-              ⏳ Oferta especial expira em{' '}
-              <span className="font-black text-rose-600">{countdown}</span>
-            </span>
-          </div>
-
-          <div className="text-center mb-8">
-            <p className="text-slate-500 font-medium bg-slate-100 inline-block px-5 py-2 rounded-full text-sm">
-              📱 Comece hoje, no seu ritmo, diretamente pelo celular
-            </p>
-          </div>
-
-          {/* Prova social — fotos de pessoas mais velhas, coerentes com 55-63 anos */}
-          <div className="mb-8">
-            <h3 className="text-center font-bold text-slate-800 text-lg mb-5">
-              Quem já decidiu agir — e não se arrependeu
+          {/* Prova social */}
+          <div className="mb-10">
+            <h3 className="text-center font-bold text-slate-800 text-lg mb-6">
+              Histórias de quem decidiu tentar
             </h3>
             <div className="space-y-4">
               {[
                 {
-                  // Mulher idosa sorrindo — coerente com "Maria, 58 anos"
                   img: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&q=80&w=150',
                   name: 'Maria, 58 anos',
-                  text: '"Eu achava que era normal sentir dor todo dia. Hoje consigo me movimentar muito melhor e até voltei a caminhar com as amigas."',
+                  text: '"Eu achava que não tinha mais solução, mas comecei a sentir melhora aos poucos. Voltei a caminhar sem aquele medo da dor."',
                 },
                 {
-                  // Homem idoso — coerente com "João, 63 anos"
                   img: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&q=80&w=150',
                   name: 'João, 63 anos',
-                  text: '"Simples de seguir e realmente funciona. Faço os exercícios na sala de casa todo dia de manhã. A dor no joelho caiu bastante."',
+                  text: '"Bem simples de acompanhar pelo celular. Faço na sala de casa e já sinto meu joelho mais firme."',
                 },
                 {
-                  // Mulher madura — coerente com "Ana, 55 anos"
                   img: 'https://images.unsplash.com/photo-1489424731084-a5d8b2a2cf54?auto=format&fit=crop&q=80&w=150',
                   name: 'Ana, 55 anos',
-                  text: '"Comecei devagar e já senti diferença nas primeiras semanas. Me arrependo de não ter feito isso antes. Recomendo de olhos fechados."',
+                  text: '"Não é nada complicado. Fico feliz de ter encontrado algo que eu realmente consigo fazer todo dia."',
                 },
               ].map((t) => (
                 <div key={t.name} className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
@@ -306,22 +268,21 @@ export default function ResultScreen({ score }: Props) {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={handleCheckout}
-              className="w-full bg-[#25D366] text-white text-base font-bold py-5 px-6 rounded-2xl shadow-xl shadow-green-200 flex items-center justify-center mb-3 transition-colors hover:bg-[#20bd5a]"
-              style={{ animation: 'pulse-cta 2s infinite' }}
+              className="w-full bg-[#25D366] text-white text-base font-bold py-5 px-6 rounded-2xl shadow-xl shadow-green-200 flex items-center justify-center mb-4 transition-colors hover:bg-[#20bd5a]"
             >
-              👉 Quero começar a cuidar das minhas articulações agora
+              👉 Quero começar a cuidar das minhas articulações
             </motion.button>
 
-            <div className="flex items-center justify-center gap-2 text-sm text-slate-600 font-medium">
-              <ShieldCheck className="w-5 h-5 text-emerald-500" />
-              Garantia de 7 dias — se não gostar, devolvemos 100% do valor
+            <div className="flex items-center justify-center gap-2 text-sm text-slate-600 font-medium bg-slate-100 py-3 px-4 rounded-xl">
+              <ShieldCheck className="w-5 h-5 text-emerald-500 flex-shrink-0" />
+              <span className="text-left">Você pode testar com segurança. Caso não se adapte, há garantia de 7 dias.</span>
             </div>
           </div>
 
           {/* Frase de encerramento */}
           <div className="text-center px-4 pt-6 border-t border-slate-200">
             <p className="text-lg font-bold text-slate-800 italic leading-snug">
-              "Seu corpo está te dando sinais. Você pode ignorar… ou começar hoje a cuidar dele."
+              "Você não precisa continuar convivendo com isso. Começar pode ser mais simples do que parece."
             </p>
           </div>
         </div>
@@ -334,7 +295,7 @@ export default function ResultScreen({ score }: Props) {
           onClick={handleCheckout}
           className="w-full max-w-md mx-auto block bg-[#25D366] text-white text-sm font-bold py-3.5 rounded-xl shadow-lg"
         >
-          🛒 Garantir meu plano por R$ 19,90 →
+          👉 Quero começar a cuidar das minhas articulações
         </motion.button>
       </div>
     </div>

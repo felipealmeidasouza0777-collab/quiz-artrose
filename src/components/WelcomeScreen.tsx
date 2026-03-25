@@ -44,7 +44,7 @@ export default function WelcomeScreen({ onStart }: Props) {
             Descubra Seu Nível de Artrose em 2 Minutos
           </h1>
           <p className="text-slate-500 mb-6 text-base text-center leading-relaxed">
-            Responda 8 perguntas rápidas e receba um diagnóstico personalizado com o que você precisa fazer agora.
+            Se você sente dor ao se levantar, caminhar ou até descansar… saiba que você não está sozinho. Responda 8 perguntas rápidas e receba um caminho simples a seguir.
           </p>
 
           <div className="space-y-3 mb-7">

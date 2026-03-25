@@ -52,7 +52,7 @@ export default function LeadCaptureScreen({ onSubmit }: Props) {
             Seu diagnóstico está pronto!
           </h2>
           <p className="text-emerald-100 text-sm">
-            Preencha abaixo para desbloquear seu resultado + plano personalizado gratuito
+            Para enviarmos sua análise completa e o plano passo a passo, preencha abaixo:
           </p>
         </div>
 
@@ -118,7 +118,7 @@ export default function LeadCaptureScreen({ onSubmit }: Props) {
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
-                <>🎯 Revelar meu resultado agora</>
+                <>👉 Ver meu resultado agora</>
               )}
             </motion.button>
           </form>
