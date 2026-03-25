@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { AnimatePresence } from 'motion/react';
 import WelcomeScreen from './components/WelcomeScreen';
 import QuestionScreen from './components/QuestionScreen';
+import LeadCaptureScreen from './components/LeadCaptureScreen';
 import ResultScreen from './components/ResultScreen';
 import { questions } from './data/questions';
 
-export type Step = 'welcome' | 'quiz' | 'result';
+export type Step = 'welcome' | 'quiz' | 'lead' | 'result';
 
 export default function App() {
   const [step, setStep] = useState<Step>('welcome');
@@ -22,8 +23,12 @@ export default function App() {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
-      setStep('result');
+      setStep('lead');
     }
+  };
+
+  const handleLeadSubmit = () => {
+    setStep('result');
   };
 
   return (
@@ -39,6 +44,7 @@ export default function App() {
             onAnswer={handleAnswer}
           />
         )}
+        {step === 'lead' && <LeadCaptureScreen key="lead" onSubmit={handleLeadSubmit} />}
         {step === 'result' && <ResultScreen key="result" score={score} />}
       </AnimatePresence>
     </div>

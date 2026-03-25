@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { useState } from 'react';
-import { Lock, ArrowRight, Loader2 } from 'lucide-react';
+import { Lock, ArrowRight, Loader2, ShieldCheck } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 
 interface Props {
   onSubmit: () => void;
@@ -9,18 +10,32 @@ interface Props {
 export default function LeadCaptureScreen({ onSubmit }: Props) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !email) return;
+    if (!name || !email || !phone) return;
     
     setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
+    
+    try {
+      // Save to Supabase
+      const { error } = await supabase
+        .from('leads')
+        .insert([
+          { nome: name, email, telefone: phone }
+        ]);
+        
+      if (error) {
+        console.error('Error saving lead:', error);
+      }
+    } catch (err) {
+      console.error('Unexpected error:', err);
+    } finally {
       setIsLoading(false);
-      onSubmit();
-    }, 1500);
+      onSubmit(); // Unlock result screen regardless of DB success to not block user
+    }
   };
 
   return (
@@ -36,10 +51,10 @@ export default function LeadCaptureScreen({ onSubmit }: Props) {
         </div>
         
         <h2 className="text-2xl font-bold text-slate-800 mb-2">
-          Sua análise está pronta!
+          Seu resultado está pronto...
         </h2>
         <p className="text-slate-600 mb-8">
-          Para onde devemos enviar o seu resultado detalhado e recomendações personalizadas?
+          Para liberar sua análise completa e recomendações personalizadas, preencha seus dados abaixo.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -63,6 +78,16 @@ export default function LeadCaptureScreen({ onSubmit }: Props) {
               className="w-full px-5 py-4 rounded-xl border-2 border-slate-100 focus:border-emerald-500 focus:ring-0 outline-none transition-colors text-lg"
             />
           </div>
+          <div>
+            <input 
+              type="tel" 
+              placeholder="Seu WhatsApp (com DDD)" 
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              required
+              className="w-full px-5 py-4 rounded-xl border-2 border-slate-100 focus:border-emerald-500 focus:ring-0 outline-none transition-colors text-lg"
+            />
+          </div>
 
           <motion.button
             whileHover={{ scale: 1.02 }}
@@ -75,16 +100,16 @@ export default function LeadCaptureScreen({ onSubmit }: Props) {
               <Loader2 className="w-6 h-6 animate-spin" />
             ) : (
               <>
-                Ver Meu Resultado
-                <ArrowRight className="ml-2 w-5 h-5" />
+                👉 Ver meu resultado agora
               </>
             )}
           </motion.button>
         </form>
         
-        <p className="text-xs text-slate-400 mt-6">
-          Seus dados estão 100% seguros. Não enviamos spam.
-        </p>
+        <div className="flex items-center justify-center text-xs text-slate-400 mt-6 space-x-1">
+          <ShieldCheck className="w-4 h-4" />
+          <span>Seus dados estão seguros. Usaremos apenas para enviar seu resultado e orientações.</span>
+        </div>
       </div>
     </motion.div>
   );
