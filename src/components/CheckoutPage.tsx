@@ -32,10 +32,10 @@ export default function CheckoutPage() {
         {/* ── Headline e Promessa ────────────────────────────────────── */}
         <div className="px-6 pt-10 pb-8 text-center border-b border-slate-100">
           <h1 className="text-2xl sm:text-3xl font-black text-slate-800 leading-tight mb-4">
-            Cansado da dor constante, da rigidez ao acordar e das noites mal dormidas?
+            O Primeiro Passo Para Acordar Sem Dor e Voltar a Viver Com Liberdade
           </h1>
           <p className="text-slate-600 text-base font-medium leading-relaxed">
-            Descubra o caminho simples e caseiro para o <strong className="text-emerald-600">alívio da dor</strong>, <strong className="text-emerald-600">melhora da mobilidade</strong> e <strong className="text-emerald-600">noites de sono mais tranquilas</strong>.
+            Um método simples e caseiro para <strong className="text-emerald-600">aliviar o desconforto nas articulações</strong>, recuperar sua <strong className="text-emerald-600">mobilidade</strong> e voltar a ter <strong className="text-emerald-600">noites de sono profundo</strong>.
           </p>
         </div>
 
@@ -48,23 +48,24 @@ export default function CheckoutPage() {
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-5">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-5">
               <h2 className="text-white font-bold text-xl leading-tight">
                 Protocolo Sem Dor em 7 Dias
               </h2>
+              <p className="text-emerald-50 text-sm mt-1 font-medium">O passo a passo simples para destravar seus movimentos.</p>
             </div>
           </div>
 
           <p className="text-slate-700 leading-relaxed mb-6">
-            Um método <strong>100% natural, simples e acessível</strong>, criado para quem não aguenta mais depender de remédios fortes ou tratamentos caros. Tudo o que você precisa fazer no conforto da sua casa.
+            Você está prestes a acessar um plano prático, <strong>100% natural e acolhedor</strong>, feito especialmente para quem não aguenta mais conviver com a dor diária. Tudo o que você precisa fazer no conforto da sua casa, dedicando poucos minutos do seu dia.
           </p>
 
           <div className="space-y-3 mb-8">
             {[
-              { icon: <Heart className="w-5 h-5 text-emerald-500" />, text: 'Redução real e progressiva da dor' },
-              { icon: <PlayCircle className="w-5 h-5 text-emerald-500" />, text: 'Mais mobilidade para as tarefas do dia a dia' },
-              { icon: <Moon className="w-5 h-5 text-emerald-500" />, text: 'Melhor qualidade do sono (sem acordar com dor)' },
-              { icon: <CheckCircle className="w-5 h-5 text-emerald-500" />, text: 'Rotina simples de poucos minutos em casa' },
+              { icon: <Heart className="w-5 h-5 text-emerald-500" />, text: 'Menos dor e rigidez ao levantar da cama' },
+              { icon: <PlayCircle className="w-5 h-5 text-emerald-500" />, text: 'Mais liberdade de movimento para o seu dia a dia' },
+              { icon: <Moon className="w-5 h-5 text-emerald-500" />, text: 'Dormir a noite inteira sem acordar com fisgadas' },
+              { icon: <CheckCircle className="w-5 h-5 text-emerald-500" />, text: 'Recuperar a sua alegria e qualidade de vida' },
             ].map((item, i) => (
               <div key={i} className="flex items-center bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
                 <div className="mr-3 flex-shrink-0">{item.icon}</div>
@@ -80,7 +81,7 @@ export default function CheckoutPage() {
             </div>
             
             <h3 className="font-bold text-emerald-900 text-center mt-2 mb-4">
-              Levando o Protocolo hoje, você ganha GRATUITAMENTE:
+              Garantindo seu acesso hoje, você recebe gratuitamente:
             </h3>
 
             <div className="space-y-4">
@@ -88,14 +89,14 @@ export default function CheckoutPage() {
                 <Utensils className="w-8 h-8 text-emerald-500 mr-3 flex-shrink-0" />
                 <div>
                   <h4 className="font-bold text-slate-800 text-sm mb-1">20 Receitas para Melhorar a Artrose</h4>
-                  <p className="text-xs text-slate-600 leading-relaxed">Refeições deliciosas, fáceis de fazer e com ingredientes que combatem a inflamação nas articulações.</p>
+                  <p className="text-xs text-slate-600 leading-relaxed">Refeições deliciosas e fáceis com ingredientes anti-inflamatórios que ajudam a nutrir e proteger suas articulações de dentro para fora.</p>
                 </div>
               </div>
               <div className="flex items-start bg-white p-4 rounded-xl shadow-sm border border-emerald-100">
                 <Moon className="w-8 h-8 text-emerald-500 mr-3 flex-shrink-0" />
                 <div>
                   <h4 className="font-bold text-slate-800 text-sm mb-1">Guia Noite Bem Dormida</h4>
-                  <p className="text-xs text-slate-600 leading-relaxed">Técnicas simples para relaxar o corpo e ter um sono profundo e reparador.</p>
+                  <p className="text-xs text-slate-600 leading-relaxed">Técnicas simples e relaxantes para aliviar a tensão do corpo antes de deitar, garantindo um sono verdadeiramente reparador.</p>
                 </div>
               </div>
             </div>
@@ -178,7 +179,7 @@ export default function CheckoutPage() {
             onClick={handleCheckout}
             className="flex-1 bg-[#25D366] text-white text-sm font-bold py-3.5 rounded-xl shadow-lg hover:bg-[#20bd5a] transition-colors"
           >
-            COMPRAR AGORA
+            QUERO ALÍVIO AGORA
           </motion.button>
         </div>
       </div>

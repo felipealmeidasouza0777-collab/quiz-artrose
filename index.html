@@ -7,6 +7,11 @@
     <meta name="description" content="Faça o teste gratuito e descubra em 2 minutos qual é o seu nível de artrose. Mais de 52.000 pessoas já descobriram e começaram a se recuperar em casa." />
     <meta property="og:title" content="Descubra Seu Nível de Artrose | Diagnóstico Gratuito" />
     <meta property="og:description" content="8 perguntas rápidas. Resultado imediato. Plano personalizado para aliviar suas dores articulares." />
+    <script>
+      window.onerror = function(message, source, lineno, colno, error) {
+        document.body.innerHTML = '<div style="color: red; padding: 20px;"><h1>Global Error</h1><pre>' + message + '</pre><pre>' + (error && error.stack) + '</pre></div>';
+      };
+    </script>
   </head>
   <body>
     <div id="root"></div>
