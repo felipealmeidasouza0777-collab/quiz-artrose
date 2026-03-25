@@ -2,7 +2,7 @@ export const questions = [
   {
     id: 1,
     title: "Com que frequência você sente dor nas articulações?",
-    image: "https://images.unsplash.com/photo-1552196563-552592624441?auto=format&fit=crop&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&q=80&w=800",
     options: [
       { text: "Nunca", points: 0 },
       { text: "Às vezes", points: 1 },
