@@ -43,10 +43,10 @@ export default function CheckoutPage() {
         <div className="px-6 py-8 bg-slate-50">
           <div className="aspect-video rounded-2xl overflow-hidden mb-6 shadow-lg relative">
             <img
-              src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=80&w=800"
-              alt="Pessoa idosa sorrindo e se alongando"
-              className="w-full h-full object-cover"
-              referrerPolicy="no-referrer"
+              src="/mnt/data/Gemini_Generated_Image_b1l93yb1l93yb1l9.png"
+alt="Produto digital para alívio das dores nas articulações e melhora do sono"
+className="w-full h-full object-cover"
+referrerPolicy="no-referrer"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-5">
               <h2 className="text-white font-bold text-xl leading-tight">
