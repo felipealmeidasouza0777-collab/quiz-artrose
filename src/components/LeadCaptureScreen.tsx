@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { useState } from 'react';
-import { Loader2, ShieldCheck, Smartphone } from 'lucide-react';
+import { Loader2, ShieldCheck, Smartphone, User, Lock, Check } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 interface Props {
@@ -9,26 +9,50 @@ interface Props {
 
 export default function LeadCaptureScreen({ onSubmit }: Props) {
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length > 11) value = value.slice(0, 11);
+    
+    if (value.length > 2) {
+      value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
+    }
+    if (value.length > 10) {
+      value = `${value.slice(0, 10)}-${value.slice(10)}`;
+    }
+    
+    setPhone(value);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !email || !phone) return;
+    if (!name || phone.replace(/\D/g, '').length < 10) return;
 
     setIsLoading(true);
 
     try {
       const { error } = await supabase
         .from('leads')
-        .insert([{ nome: name, email, telefone: phone }]);
+        .insert([{ nome: name, telefone: phone }]);
 
       if (error) {
-        console.error('Error saving lead:', error);
+        console.error('Error saving lead to Supabase:', error);
+        throw error;
       }
     } catch (err) {
-      console.error('Unexpected error:', err);
+      console.warn('Supabase failed or not configured. Falling back to webhook.', err);
+      // Fallback to webhook
+      try {
+        await fetch('https://hook.us1.make.com/YOUR_WEBHOOK_URL', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nome: name, telefone: phone, source: 'quiz_funnel' })
+        });
+      } catch (webhookErr) {
+        console.error('Webhook fallback also failed:', webhookErr);
+      }
     } finally {
       setIsLoading(false);
       onSubmit();
@@ -37,98 +61,130 @@ export default function LeadCaptureScreen({ onSubmit }: Props) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0 }}
-      className="max-w-md mx-auto min-h-screen flex flex-col justify-center p-6"
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -16 }}
+      transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+      className="max-w-[430px] mx-auto min-h-[100svh] flex flex-col relative"
+      style={{ backgroundColor: 'var(--bg-base)' }}
     >
-      <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
-        {/* Teaser de resultado bloqueado */}
-        <div className="bg-gradient-to-br from-emerald-600 to-emerald-700 px-6 pt-8 pb-6 text-center">
-          <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-            <span className="text-3xl">🔒</span>
-          </div>
-          <h2 className="text-xl font-bold text-white mb-1">
-            Seu diagnóstico está pronto!
-          </h2>
-          <p className="text-emerald-100 text-sm">
-            Para enviarmos sua análise completa e o plano passo a passo, preencha abaixo:
-          </p>
-        </div>
-
-        {/* O que você vai receber */}
-        <div className="px-6 pt-5 pb-3">
-          <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
-            Você receberá gratuitamente:
-          </p>
-          <div className="space-y-2 mb-5">
-            <div className="flex items-center gap-2 text-sm text-slate-700">
-              <span className="text-emerald-500 font-bold">✓</span>
-              <span>Seu nível de artrose e o que ele significa</span>
-            </div>
-            <div className="flex items-center gap-2 text-sm text-slate-700">
-              <span className="text-emerald-500 font-bold">✓</span>
-              <span>Recomendações personalizadas para o seu caso</span>
-            </div>
-            <div className="flex items-center gap-2 text-sm text-slate-700">
-              <span className="text-emerald-500 font-bold">✓</span>
-              <span>Plano de ação para começar hoje em casa</span>
-            </div>
+      {/* Top Emotional Section */}
+      <div 
+        className="w-full h-[180px] relative flex flex-col items-center justify-center px-[20px] pt-[20px]"
+        style={{ background: 'linear-gradient(180deg, #2d1b69 0%, #1a1a2e 100%)' }}
+      >
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[200px] h-[100px] pointer-events-none" style={{ background: 'radial-gradient(ellipse at bottom, rgba(124, 58, 237, 0.4) 0%, transparent 70%)' }} />
+        
+        <div className="relative flex items-center justify-center w-[56px] h-[56px] rounded-full mb-[16px] z-10">
+          <div className="absolute inset-0 rounded-full" style={{ border: '2px solid rgba(168,85,247,0.2)' }} />
+          <div className="absolute inset-1 rounded-full" style={{ border: '2px solid rgba(168,85,247,0.4)' }} />
+          <Lock className="w-[24px] h-[24px]" style={{ color: '#a855f7' }} />
+          
+          <div className="absolute -top-1 -right-1 w-[20px] h-[20px] rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--success)', border: '2px solid #2d1b69' }}>
+            <Check className="w-[12px] h-[12px] text-white" strokeWidth={3} />
           </div>
         </div>
 
-        {/* Formulário */}
-        <div className="px-6 pb-6">
-          <form onSubmit={handleSubmit} className="space-y-3">
+        <h2 className="text-[18px] font-[800] text-white leading-tight mb-[4px] z-10 text-center">
+          Seu diagnóstico está pronto!
+        </h2>
+        <p className="text-[13px] z-10 text-center" style={{ color: 'var(--text-muted)' }}>
+          Desbloqueie seus resultados personalizados
+        </p>
+      </div>
+
+      <div className="flex-1 px-[20px] pt-[24px] pb-[32px] flex flex-col">
+        {/* Benefits Section */}
+        <div className="mb-[24px]">
+          <div 
+            className="inline-block px-[10px] py-[4px] rounded-[6px] text-[10px] font-[700] tracking-[0.08em] uppercase mb-[12px]"
+            style={{ backgroundColor: 'rgba(255,255,255,0.05)', color: 'var(--text-secondary)' }}
+          >
+            VOCÊ RECEBERÁ AGORA:
+          </div>
+          
+          <div className="flex flex-col gap-[6px]">
+            <div className="flex items-center p-[10px] px-[14px] rounded-[12px]" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--accent-border)' }}>
+              <div className="w-[20px] h-[20px] rounded-full flex items-center justify-center mr-[12px] flex-shrink-0" style={{ backgroundColor: 'rgba(34, 197, 94, 0.15)' }}>
+                <Check className="w-[12px] h-[12px]" style={{ color: 'var(--success)' }} strokeWidth={3} />
+              </div>
+              <span className="text-[13px] font-[500] text-white">Causa provável das suas dores</span>
+            </div>
+            <div className="flex items-center p-[10px] px-[14px] rounded-[12px]" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--accent-border)' }}>
+              <div className="w-[20px] h-[20px] rounded-full flex items-center justify-center mr-[12px] flex-shrink-0" style={{ backgroundColor: 'rgba(34, 197, 94, 0.15)' }}>
+                <Check className="w-[12px] h-[12px]" style={{ color: 'var(--success)' }} strokeWidth={3} />
+              </div>
+              <span className="text-[13px] font-[500] text-white">Nível de gravidade atual</span>
+            </div>
+            <div className="flex items-center p-[10px] px-[14px] rounded-[12px]" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--accent-border)' }}>
+              <div className="w-[20px] h-[20px] rounded-full flex items-center justify-center mr-[12px] flex-shrink-0" style={{ backgroundColor: 'rgba(34, 197, 94, 0.15)' }}>
+                <Check className="w-[12px] h-[12px]" style={{ color: 'var(--success)' }} strokeWidth={3} />
+              </div>
+              <span className="text-[13px] font-[500] text-white">Plano de ação recomendado</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="flex flex-col gap-[10px] mb-[24px]">
+          <div className="relative">
+            <User className="absolute left-[16px] top-1/2 -translate-y-1/2 w-[20px] h-[20px]" style={{ color: 'var(--accent-light)' }} />
             <input
               type="text"
               placeholder="Seu primeiro nome"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full px-4 py-3.5 rounded-xl border-2 border-slate-100 focus:border-emerald-500 focus:ring-0 outline-none transition-colors text-base text-slate-800 placeholder:text-slate-400"
+              className="w-full pl-[48px] pr-[16px] h-[52px] rounded-[14px] outline-none transition-all text-[15px] text-white"
+              style={{ 
+                backgroundColor: 'var(--bg-card)', 
+                border: '1px solid rgba(168,85,247,0.3)',
+              }}
             />
-            <input
-              type="email"
-              placeholder="Seu melhor e-mail"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full px-4 py-3.5 rounded-xl border-2 border-slate-100 focus:border-emerald-500 focus:ring-0 outline-none transition-colors text-base text-slate-800 placeholder:text-slate-400"
-            />
-            <div className="relative">
-              <Smartphone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-              <input
-                type="tel"
-                placeholder="WhatsApp com DDD (ex: 11 99999-9999)"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                required
-                className="w-full pl-10 pr-4 py-3.5 rounded-xl border-2 border-slate-100 focus:border-emerald-500 focus:ring-0 outline-none transition-colors text-base text-slate-800 placeholder:text-slate-400"
-              />
-            </div>
-
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              type="submit"
-              disabled={isLoading}
-              className="w-full bg-emerald-600 text-white text-base font-bold py-4 px-8 rounded-xl shadow-lg shadow-emerald-200 flex items-center justify-center mt-2 disabled:opacity-70 transition-colors hover:bg-emerald-700"
-            >
-              {isLoading ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <>👉 Ver meu resultado agora</>
-              )}
-            </motion.button>
-          </form>
-
-          <div className="flex items-start gap-2 mt-4">
-            <ShieldCheck className="w-4 h-4 text-slate-400 flex-shrink-0 mt-0.5" />
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Seus dados estão 100% seguros. Usaremos apenas para enviar seu resultado e orientações personalizadas. Sem spam.
-            </p>
           </div>
+          <div className="relative">
+            <Smartphone className="absolute left-[16px] top-1/2 -translate-y-1/2 w-[20px] h-[20px]" style={{ color: 'var(--accent-light)' }} />
+            <input
+              type="tel"
+              placeholder="WhatsApp com DDD"
+              value={phone}
+              onChange={handlePhoneChange}
+              required
+              className="w-full pl-[48px] pr-[16px] h-[52px] rounded-[14px] outline-none transition-all text-[15px] text-white"
+              style={{ 
+                backgroundColor: 'var(--bg-card)', 
+                border: '1px solid rgba(168,85,247,0.3)',
+              }}
+            />
+          </div>
+
+          <motion.button
+            whileTap={{ scale: 0.97 }}
+            type="submit"
+            disabled={isLoading || !name || phone.replace(/\D/g, '').length < 10}
+            className="w-full flex flex-col items-center justify-center shimmer-btn mt-[8px] disabled:opacity-70"
+            style={{ 
+              backgroundColor: 'var(--accent)', 
+              borderRadius: '16px', 
+              minHeight: '56px',
+              padding: '10px 16px'
+            }}
+          >
+            {isLoading ? (
+              <Loader2 className="w-[24px] h-[24px] animate-spin text-white" />
+            ) : (
+              <>
+                <span className="text-[17px] font-[800] text-white leading-tight">Ver meu resultado agora</span>
+              </>
+            )}
+          </motion.button>
+        </form>
+
+        <div className="mt-auto flex items-center justify-center gap-[6px]">
+          <ShieldCheck className="w-[12px] h-[12px]" style={{ color: 'rgba(255,255,255,0.35)' }} />
+          <p className="text-[12px]" style={{ color: 'rgba(255,255,255,0.35)' }}>
+            Seus dados estão 100% seguros. Sem spam.
+          </p>
         </div>
       </div>
     </motion.div>

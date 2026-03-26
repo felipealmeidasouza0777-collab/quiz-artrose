@@ -9,30 +9,57 @@ import { questions } from './data/questions';
 
 export type Step = 'welcome' | 'quiz' | 'lead' | 'result' | 'checkout';
 
+declare global {
+  interface Window {
+    fbq?: (...args: any[]) => void;
+  }
+}
+
+export const trackEvent = (eventName: string, data?: any) => {
+  if (typeof window !== 'undefined' && window.fbq) {
+    if (eventName === 'InitiateCheckout') {
+      window.fbq('track', eventName, data);
+    } else {
+      window.fbq('trackCustom', eventName, data);
+    }
+  }
+};
+
 export default function App() {
   const [step, setStep] = useState<Step>('welcome');
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
-  const [answers, setAnswers] = useState<number[]>([]);
+  const [ageGroup, setAgeGroup] = useState<string>('');
 
-  const handleStart = () => setStep('quiz');
+  const handleStart = () => {
+    trackEvent('QuizStarted');
+    setStep('quiz');
+  };
 
-  const handleAnswer = (points: number) => {
-    setScore(score + points);
-    setAnswers([...answers, points]);
+  const handleAnswer = (points: number, optionText: string) => {
+    const isAgeQuestion = currentQuestionIndex === questions.length - 1;
+    
+    if (isAgeQuestion) {
+      setAgeGroup(optionText);
+    } else {
+      setScore(prev => prev + points);
+    }
     
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
+      trackEvent('QuizCompleted', { score: score + (isAgeQuestion ? 0 : points) });
       setStep('lead');
     }
   };
 
   const handleLeadSubmit = () => {
+    trackEvent('LeadCaptured');
     setStep('result');
   };
 
   const handleGoToCheckout = () => {
+    trackEvent('InitiateCheckout');
     setStep('checkout');
   };
 
@@ -50,7 +77,7 @@ export default function App() {
           />
         )}
         {step === 'lead' && <LeadCaptureScreen key="lead" onSubmit={handleLeadSubmit} />}
-        {step === 'result' && <ResultScreen key="result" score={score} onCheckout={handleGoToCheckout} />}
+        {step === 'result' && <ResultScreen key="result" score={score} ageGroup={ageGroup} onCheckout={handleGoToCheckout} />}
         {step === 'checkout' && <CheckoutPage key="checkout" />}
       </AnimatePresence>
     </div>

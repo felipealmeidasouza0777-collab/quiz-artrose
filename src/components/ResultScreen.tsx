@@ -1,19 +1,22 @@
 import { motion } from 'motion/react';
+import { useState, useEffect } from 'react';
 import {
   AlertCircle, CheckCircle, Activity, Star, ShieldCheck,
-  BookOpen, Moon, Utensils, ArrowRight, Gift
+  BookOpen, Moon, Utensils, ArrowRight, Gift, Clock
 } from 'lucide-react';
+import { copy } from '../data/copy';
 
 interface Props {
   score: number;
+  ageGroup: string;
   onCheckout: () => void;
 }
 
 function getResultContent(score: number) {
   if (score >= 7 && score <= 14) {
     return {
-      title: 'Seu nível de desconforto nas articulações está moderado — e isso pode piorar se não for tratado.',
-      subtitle: 'Você já sente o impacto no seu dia a dia, mas ainda há tempo de reverter esse quadro antes que limite totalmente seus movimentos.',
+      title: copy.result.moderado.title,
+      subtitle: copy.result.moderado.subtitle,
       color: 'text-orange-600',
       bg: 'bg-orange-50',
       icon: <Activity className="w-10 h-10 text-orange-500" />
@@ -21,28 +24,47 @@ function getResultContent(score: number) {
   }
   if (score > 14) {
     return {
-      title: 'Seu nível de desconforto nas articulações está avançado — mas ainda é possível recuperar sua qualidade de vida.',
-      subtitle: 'A dor já faz parte da sua rotina e limita muito o que você gosta de fazer. Suas articulações precisam de cuidado imediato.',
+      title: copy.result.avancado.title,
+      subtitle: copy.result.avancado.subtitle,
       color: 'text-rose-600',
       bg: 'bg-rose-50',
       icon: <AlertCircle className="w-10 h-10 text-rose-500" />
     };
   }
   return {
-    title: 'Seu nível de desconforto nas articulações está leve — mas este é o momento exato para evitar que piore.',
-    subtitle: 'Aquelas "fisgadas" e rigidez matinal são avisos do seu corpo. Cuidar agora é a forma mais inteligente de evitar dores intensas no futuro.',
+    title: copy.result.leve.title,
+    subtitle: copy.result.leve.subtitle,
     color: 'text-emerald-600',
     bg: 'bg-emerald-50',
     icon: <CheckCircle className="w-10 h-10 text-emerald-500" />
   };
 }
 
-export default function ResultScreen({ score }: Props) {
+export default function ResultScreen({ score, ageGroup, onCheckout }: Props) {
   const result = getResultContent(score);
+  
+  const [timeLeft, setTimeLeft] = useState(() => {
+    const savedTime = sessionStorage.getItem('countdown_time');
+    return savedTime ? parseInt(savedTime, 10) : 15 * 60; // 15 minutes in seconds
+  });
 
-  const handleBuy = () => {
-    window.location.href = 'https://pay.cakto.com.br/psynepw_810418';
-  };
+  useEffect(() => {
+    if (timeLeft <= 0) return;
+
+    const timerId = setInterval(() => {
+      setTimeLeft((prev) => {
+        const newTime = prev - 1;
+        sessionStorage.setItem('countdown_time', newTime.toString());
+        return newTime;
+      });
+    }, 1000);
+
+    return () => clearInterval(timerId);
+  }, [timeLeft]);
+
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft % 60;
+  const isExpired = timeLeft <= 0;
 
   return (
     <div className="min-h-screen bg-[#FAFAFA] pb-24 font-sans text-slate-800">
@@ -64,6 +86,28 @@ export default function ResultScreen({ score }: Props) {
           <p className="text-slate-700 text-base leading-relaxed">
             {result.subtitle}
           </p>
+          
+          {/* Age Group Specific Copy */}
+          {(ageGroup === '45-60' || ageGroup === '60+') && (
+            <div className="mt-6 p-4 bg-white/60 rounded-xl border border-white/80 shadow-sm text-left">
+              <p className="text-slate-700 text-sm font-medium leading-relaxed">
+                {copy.result.ageGroupText[ageGroup]}
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Countdown Timer */}
+        <div className="bg-slate-900 text-white px-6 py-4 flex items-center justify-center gap-3 sticky top-0 z-20 shadow-md">
+          <Clock className={`w-5 h-5 ${isExpired ? 'text-rose-400' : 'text-amber-400 animate-pulse'}`} />
+          <span className="font-medium text-sm">
+            {isExpired ? copy.result.countdown.expired : copy.result.countdown.text}
+          </span>
+          {!isExpired && (
+            <span className="font-mono font-bold text-lg text-amber-400 bg-slate-800 px-2 py-0.5 rounded">
+              {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
+            </span>
+          )}
         </div>
 
         {/* 2. IDENTIFICAÇÃO (DOR REAL) */}
@@ -224,7 +268,7 @@ export default function ResultScreen({ score }: Props) {
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={handleBuy}
+            onClick={onCheckout}
             className="w-full bg-[#25D366] text-white text-lg font-bold py-5 px-6 rounded-2xl shadow-lg shadow-green-200 flex items-center justify-center mb-6 transition-colors hover:bg-[#20bd5a]"
           >
             Quero começar meu protocolo agora
@@ -247,7 +291,7 @@ export default function ResultScreen({ score }: Props) {
         <div className="max-w-md mx-auto">
           <motion.button
             whileTap={{ scale: 0.97 }}
-            onClick={handleBuy}
+            onClick={onCheckout}
             className="w-full bg-[#25D366] text-white text-base font-bold py-3.5 rounded-xl shadow-md hover:bg-[#20bd5a] transition-colors"
           >
             Quero começar meu protocolo agora

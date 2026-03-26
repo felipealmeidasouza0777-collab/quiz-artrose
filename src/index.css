@@ -1,1 +1,45 @@
 @import "tailwindcss";
+
+:root {
+  --bg-base: #0f0f23;
+  --bg-surface: #1a1833;
+  --bg-card: #1e1b3a;
+  --accent: #7c3aed;
+  --accent-light: #a855f7;
+  --accent-muted: rgba(168, 85, 247, 0.15);
+  --accent-border: rgba(168, 85, 247, 0.25);
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-muted: rgba(255, 255, 255, 0.4);
+  --success: #22c55e;
+  --warning: #fbbf24;
+  --danger: #ef4444;
+}
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+@keyframes shimmer {
+  0% { left: -60%; }
+  100% { left: 110%; }
+}
+
+.shimmer-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 50%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: skewX(-20deg);
+  animation: shimmer 2.5s infinite;
+}

@@ -1,7 +1,6 @@
 import { motion } from 'motion/react';
 import {
   CheckCircle,
-  PlayCircle,
   Utensils,
   Moon,
   ShieldCheck,
@@ -9,7 +8,10 @@ import {
   Star,
   Clock,
   Heart,
-  Activity
+  Activity,
+  Smartphone,
+  Lock,
+  MessageCircle
 } from 'lucide-react';
 
 export default function CheckoutPage() {
@@ -33,38 +35,51 @@ export default function CheckoutPage() {
         {/* ── Headline e Promessa ────────────────────────────────────── */}
         <div className="px-6 pt-10 pb-8 text-center border-b border-slate-100">
           <h1 className="text-2xl sm:text-3xl font-black text-slate-800 leading-tight mb-4">
-            O Primeiro Passo Para Acordar Sem Dor e Voltar a Viver Com Liberdade
+            O Fim das Dores Constantes e Noites Mal Dormidas
           </h1>
           <p className="text-slate-600 text-base font-medium leading-relaxed">
-            Um método simples e caseiro para <strong className="text-emerald-600">aliviar o desconforto nas articulações</strong>, recuperar sua <strong className="text-emerald-600">mobilidade</strong> e voltar a ter <strong className="text-emerald-600">noites de sono profundo</strong>.
+            Um método natural e comprovado para <strong className="text-emerald-600">aliviar o desconforto nas articulações</strong>, recuperar sua <strong className="text-emerald-600">mobilidade</strong> e voltar a ter <strong className="text-emerald-600">noites de sono profundo</strong> em poucos dias.
           </p>
         </div>
 
-        {/* ── Apresentação do Produto ────────────────────────────────── */}
+        {/* ── Apresentação do Produto (Mockup CSS) ────────────────────────────────── */}
         <div className="px-6 py-8 bg-slate-50">
-          <div className="aspect-video rounded-2xl overflow-hidden mb-6 shadow-lg relative">
-            <img
-              src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=80&w=800"
-              alt="Pessoa idosa sorrindo e se alongando"
-              className="w-full h-full object-cover"
-              referrerPolicy="no-referrer"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-5">
-              <h2 className="text-white font-bold text-xl leading-tight">
-                Protocolo Sem Dor em 7 Dias
-              </h2>
-              <p className="text-emerald-50 text-sm mt-1 font-medium">O passo a passo simples para destravar seus movimentos.</p>
+          
+          {/* CSS Mockup do Kit Digital */}
+          <div className="relative w-full max-w-[280px] mx-auto mb-10 h-[320px] perspective-1000">
+            {/* Livro Principal */}
+            <div className="absolute left-1/2 -translate-x-1/2 top-0 w-48 h-64 bg-gradient-to-br from-emerald-700 to-emerald-900 rounded-r-xl rounded-l-sm shadow-2xl z-30 transform rotate-y-[-15deg] rotate-z-[2deg] border-l-4 border-emerald-950 flex flex-col items-center justify-center p-4 text-center">
+              <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mb-3 backdrop-blur-sm">
+                <Activity className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-white font-black text-xl leading-tight mb-1">Protocolo Sem Dor</h3>
+              <p className="text-emerald-100 text-xs font-medium uppercase tracking-widest">Em 7 Dias</p>
+              <div className="mt-auto w-full h-1 bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
+            </div>
+            
+            {/* Bônus 1: Receitas */}
+            <div className="absolute left-4 top-12 w-40 h-56 bg-gradient-to-br from-amber-500 to-orange-600 rounded-r-lg rounded-l-sm shadow-xl z-20 transform rotate-y-[-20deg] rotate-z-[-8deg] border-l-4 border-orange-800 flex flex-col items-center justify-center p-3 text-center opacity-90">
+              <Utensils className="w-6 h-6 text-white/80 mb-2" />
+              <h4 className="text-white font-bold text-sm leading-tight">20 Receitas</h4>
+              <p className="text-orange-100 text-[10px] uppercase">Anti-inflamatórias</p>
+            </div>
+
+            {/* Bônus 2: Sono */}
+            <div className="absolute right-4 top-16 w-40 h-56 bg-gradient-to-br from-indigo-600 to-blue-800 rounded-r-lg rounded-l-sm shadow-xl z-10 transform rotate-y-[-10deg] rotate-z-[12deg] border-l-4 border-indigo-900 flex flex-col items-center justify-center p-3 text-center opacity-90">
+              <Moon className="w-6 h-6 text-white/80 mb-2" />
+              <h4 className="text-white font-bold text-sm leading-tight">Noite Bem Dormida</h4>
+              <p className="text-indigo-100 text-[10px] uppercase">Guia Prático</p>
             </div>
           </div>
 
-          <p className="text-slate-700 leading-relaxed mb-6">
+          <p className="text-slate-700 leading-relaxed mb-6 text-center">
             Você está prestes a acessar um plano prático, <strong>100% natural e acolhedor</strong>, feito especialmente para quem não aguenta mais conviver com a dor diária. Tudo o que você precisa fazer no conforto da sua casa, dedicando poucos minutos do seu dia.
           </p>
 
           <div className="space-y-3 mb-8">
             {[
               { icon: <Heart className="w-5 h-5 text-emerald-500" />, text: 'Menos dor e rigidez ao levantar da cama' },
-              { icon: <PlayCircle className="w-5 h-5 text-emerald-500" />, text: 'Mais liberdade de movimento para o seu dia a dia' },
+              { icon: <Activity className="w-5 h-5 text-emerald-500" />, text: 'Mais liberdade de movimento para o seu dia a dia' },
               { icon: <Moon className="w-5 h-5 text-emerald-500" />, text: 'Dormir a noite inteira sem acordar com fisgadas' },
               { icon: <CheckCircle className="w-5 h-5 text-emerald-500" />, text: 'Recuperar a sua alegria e qualidade de vida' },
             ].map((item, i) => (
@@ -90,7 +105,7 @@ export default function CheckoutPage() {
                 <Utensils className="w-8 h-8 text-emerald-500 mr-3 flex-shrink-0" />
                 <div>
                   <h4 className="font-bold text-slate-800 text-sm mb-1">20 Receitas para Melhorar a Artrose</h4>
-                  <p className="text-xs text-slate-600 leading-relaxed">Refeições deliciosas e fáceis com ingredientes anti-inflamatórios que ajudam a nutrir e proteger suas articulações de dentro para fora.</p>
+                  <p className="text-xs text-slate-600 leading-relaxed">Refeições deliciosas e fáceis com ingredientes anti-inflamatórias que ajudam a nutrir e proteger suas articulações de dentro para fora.</p>
                 </div>
               </div>
               <div className="flex items-start bg-white p-4 rounded-xl shadow-sm border border-emerald-100">
@@ -127,13 +142,58 @@ export default function CheckoutPage() {
                 M
               </div>
               <div>
-                <p className="font-bold text-slate-800 text-sm">Marlene S., 62 anos</p>
+                <p className="font-bold text-slate-800 text-sm">Maria S., 62 anos</p>
                 <div className="flex text-amber-400">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="w-3 h-3 fill-current" />
                   ))}
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── FAQ ────────────────────────────────────────────────────── */}
+        <div className="px-6 py-8 bg-slate-50 border-t border-slate-100">
+          <h3 className="font-bold text-slate-800 text-lg mb-6 text-center">Dúvidas Frequentes</h3>
+          <div className="space-y-4">
+            <div className="bg-white p-4 rounded-xl border border-slate-200">
+              <h4 className="font-bold text-slate-800 text-sm mb-2">Como vou receber o material?</h4>
+              <p className="text-slate-600 text-sm leading-relaxed">Assim que o pagamento for confirmado, você receberá um e-mail com o link para baixar todo o material (Protocolo + Bônus) diretamente no seu celular, tablet ou computador.</p>
+            </div>
+            <div className="bg-white p-4 rounded-xl border border-slate-200">
+              <h4 className="font-bold text-slate-800 text-sm mb-2">Serve para qualquer tipo de dor na articulação?</h4>
+              <p className="text-slate-600 text-sm leading-relaxed">Sim! O método foi desenvolvido com foco em aliviar a inflamação e a rigidez, sendo muito eficaz para dores nos joelhos, ombros, mãos, quadril e coluna.</p>
+            </div>
+            <div className="bg-white p-4 rounded-xl border border-slate-200">
+              <h4 className="font-bold text-slate-800 text-sm mb-2">Em quanto tempo vejo resultados?</h4>
+              <p className="text-slate-600 text-sm leading-relaxed">Muitas pessoas relatam alívio significativo da rigidez matinal já nos primeiros 3 a 7 dias seguindo o passo a passo.</p>
+            </div>
+            <div className="bg-white p-4 rounded-xl border border-slate-200">
+              <h4 className="font-bold text-slate-800 text-sm mb-2">E se eu não gostar?</h4>
+              <p className="text-slate-600 text-sm leading-relaxed">Você tem 7 dias de garantia incondicional. Se não sentir melhora ou achar que não é para você, devolvemos 100% do seu dinheiro. Sem perguntas.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Trust Seals ────────────────────────────────────────────── */}
+        <div className="px-6 py-6 bg-white border-t border-slate-100">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col items-center text-center p-3 bg-slate-50 rounded-lg">
+              <Lock className="w-6 h-6 text-slate-400 mb-2" />
+              <span className="text-xs font-medium text-slate-600">Pagamento 100%<br/>Seguro</span>
+            </div>
+            <div className="flex flex-col items-center text-center p-3 bg-slate-50 rounded-lg">
+              <Smartphone className="w-6 h-6 text-slate-400 mb-2" />
+              <span className="text-xs font-medium text-slate-600">Acesso Imediato<br/>no Celular</span>
+            </div>
+            <div className="flex flex-col items-center text-center p-3 bg-slate-50 rounded-lg">
+              <ShieldCheck className="w-6 h-6 text-slate-400 mb-2" />
+              <span className="text-xs font-medium text-slate-600">Garantia de<br/>7 Dias</span>
+            </div>
+            <div className="flex flex-col items-center text-center p-3 bg-slate-50 rounded-lg">
+              <MessageCircle className="w-6 h-6 text-slate-400 mb-2" />
+              <span className="text-xs font-medium text-slate-600">Suporte via<br/>WhatsApp</span>
             </div>
           </div>
         </div>
@@ -160,7 +220,7 @@ export default function CheckoutPage() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={handleCheckout}
-              className="w-full bg-[#25D366] text-white text-lg font-bold py-5 px-6 rounded-2xl shadow-[0_0_30px_rgba(37,211,102,0.3)] flex items-center justify-center mb-6 transition-colors hover:bg-[#20bd5a]"
+              className="w-full bg-[#16a34a] text-white text-lg font-bold py-5 px-6 rounded-2xl shadow-[0_0_30px_rgba(22,163,74,0.3)] flex items-center justify-center mb-6 transition-colors hover:bg-[#15803d]"
             >
               👉 QUERO ALÍVIO PARA MINHAS DORES AGORA
             </motion.button>
@@ -185,7 +245,7 @@ export default function CheckoutPage() {
           <motion.button
             whileTap={{ scale: 0.97 }}
             onClick={handleCheckout}
-            className="flex-1 bg-[#25D366] text-white text-sm font-bold py-3.5 rounded-xl shadow-lg hover:bg-[#20bd5a] transition-colors"
+            className="flex-1 bg-[#16a34a] text-white text-sm font-bold py-3.5 rounded-xl shadow-lg hover:bg-[#15803d] transition-colors"
           >
             QUERO ALÍVIO AGORA
           </motion.button>
