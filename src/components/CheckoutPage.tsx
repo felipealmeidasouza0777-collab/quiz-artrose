@@ -8,7 +8,8 @@ import {
   Gift,
   Star,
   Clock,
-  Heart
+  Heart,
+  Activity
 } from 'lucide-react';
 
 export default function CheckoutPage() {
@@ -43,10 +44,10 @@ export default function CheckoutPage() {
         <div className="px-6 py-8 bg-slate-50">
           <div className="aspect-video rounded-2xl overflow-hidden mb-6 shadow-lg relative">
             <img
-              src="/mnt/data/Gemini_Generated_Image_b1l93yb1l93yb1l9.png"
-alt="Produto digital para alívio das dores nas articulações e melhora do sono"
-className="w-full h-full object-cover"
-referrerPolicy="no-referrer"
+              src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=80&w=800"
+              alt="Pessoa idosa sorrindo e se alongando"
+              className="w-full h-full object-cover"
+              referrerPolicy="no-referrer"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-5">
               <h2 className="text-white font-bold text-xl leading-tight">
@@ -97,6 +98,13 @@ referrerPolicy="no-referrer"
                 <div>
                   <h4 className="font-bold text-slate-800 text-sm mb-1">Guia Noite Bem Dormida</h4>
                   <p className="text-xs text-slate-600 leading-relaxed">Técnicas simples e relaxantes para aliviar a tensão do corpo antes de deitar, garantindo um sono verdadeiramente reparador.</p>
+                </div>
+              </div>
+              <div className="flex items-start bg-white p-4 rounded-xl shadow-sm border border-emerald-100">
+                <Activity className="w-8 h-8 text-emerald-500 mr-3 flex-shrink-0" />
+                <div>
+                  <h4 className="font-bold text-slate-800 text-sm mb-1">Guia de Automassagem</h4>
+                  <p className="text-xs text-slate-600 leading-relaxed">Técnicas simples de 5 minutos para aliviar a tensão muscular e destravar as articulações usando apenas as suas mãos.</p>
                 </div>
               </div>
             </div>
