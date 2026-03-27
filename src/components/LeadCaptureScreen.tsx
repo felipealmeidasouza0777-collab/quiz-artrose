@@ -146,7 +146,7 @@ export default function LeadCaptureScreen({ onSubmit }: Props) {
             <Smartphone className="absolute left-[16px] top-1/2 -translate-y-1/2 w-[20px] h-[20px]" style={{ color: 'var(--accent-light)' }} />
             <input
               type="tel"
-              placeholder="WhatsApp com DDD"
+              placeholder="Celular com DDD"
               value={phone}
               onChange={handlePhoneChange}
               required
